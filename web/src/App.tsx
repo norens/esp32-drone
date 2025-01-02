@@ -1,11 +1,11 @@
-import ArmDronePage from "./compopents/ArmDronePage.tsx";
+import ArmControl from "./compopents/ArmControl.tsx";
 
 function App()
 {
 
 	return (
 		<>
-			<ArmDronePage/>
+			<ArmControl/>
 		</>
 	);
 }
