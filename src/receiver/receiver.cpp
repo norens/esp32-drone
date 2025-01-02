@@ -234,17 +234,14 @@ void loop()
 	if (micros() - lastPing > 2e6)
 	{
 		armed = false;
-		Serial.println("set armed: false");
 	}
 
 	if (armed)
 	{
 		data.ch[4] = 1800;
-		Serial.println("armed: true");
 	}
 	else
 	{
-		Serial.println("armed: false");
 		data.ch[4] = 172;
 		resetPid(xPosPID, -MAX_VEL, MAX_VEL);
 		resetPid(yPosPID, -MAX_VEL, MAX_VEL);
@@ -279,7 +276,7 @@ void loop()
 	if (micros() - lastSbusSend > 1e6 / sbusFrequency)
 	{
 		lastSbusSend = micros();
-		// Serial.printf("PWM x: %d, y: %d, z: %d, yaw: %d\nPos x: %f, y: %f, z: %f, yaw: %f\n", xPWM, yPWM, zPWM, yawPWM, xVel, yVel, zPos, yawPos);
+		Serial.printf("PWM x: %d, y: %d, z: %d, yaw: %d\nPos x: %f, y: %f, z: %f, yaw: %f\n", xPWM, yPWM, zPWM, yawPWM, xVel, yVel, zPos, yawPos);
 		// Serial.printf("Setpoint x: %f, y: %f, z: %f\n", xVelSetpoint, yVelSetpoint, zVelSetpoint);
 		// Serial.printf("Pos x: %f, y: %f, z: %f\n", xVel, yVel, zPos);
 		// Serial.printf("Output x: %f, y: %f, z: %f\n", xVelOutput, yVelOutput, zVelOutput);

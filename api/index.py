@@ -1,39 +1,28 @@
-import serial
-import time
-import json
+from flask import Flask
+from flask_socketio import SocketIO
 import threading
+import serial
+import json
+import time
 
+app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins='*')
+
+serialLock = threading.Lock()
 ser = serial.Serial("/dev/cu.usbserial-58EF0642951", 1000000, write_timeout=1)
-serial_lock = threading.Lock()
 
 
-if ser.is_open:
-    print("Порт успішно відкритий!")
-
-    try:
-        data = {
-            "droneArmed": [True, True]
+@socketio.on("arm-drone")
+def arm_drone(data):
+    for droneIndex in range(len(data["droneArmed"])):
+        serial_data = {
+            "armed": data["droneArmed"][droneIndex],
         }
+        with serialLock:
+            ser.write(f"{str(droneIndex)}{json.dumps(serial_data)}".encode('utf-8'))
 
-        for droneIndex, armed in enumerate(data["droneArmed"]):
-            serial_data = {
-                "armed": armed,
-            }
+        time.sleep(0.01)
 
-            with serial_lock:
-                ser.write(f"{str(droneIndex)}{json.dumps(serial_data)}".encode('utf-8'))
-                print(f"Статус для дрону {droneIndex}: {'armed' if armed else 'disarmed'}")
 
-            time.sleep(0.01)
-
-        time.sleep(1)
-
-    except Exception as e:
-        print(f"Сталася помилка при відправці: {e}")
-
-    finally:
-        ser.close()
-        print("Порт закритий.")
-
-else:
-    print("Не вдалося відкрити порт.")
+if __name__ == '__main__':
+    socketio.run(app, port=3001, debug=True)
