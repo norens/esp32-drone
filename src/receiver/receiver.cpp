@@ -74,7 +74,7 @@ uint8_t newMACAddress[] = {0xC0, 0x4E, 0x30, 0x4B, 0x80, 0x3B};
 // callback function that will be executed when data is received
 void OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
 {
-	Serial.println((char*)incomingData);
+	// Serial.println((char *) incomingData);
 	DeserializationError err = deserializeJson(json, (char *) incomingData);
 
 	if (err)
@@ -264,9 +264,9 @@ void loop()
 	int yPWM = 992 + (yVelOutput * 811) + yTrim;
 	int zPWM = 992 + (Z_GAIN * zVelOutput * 811) + zTrim;
 	int yawPWM = 992 + (yawPosOutput * 811) + yawTrim;
-	double groundEffectMultiplier =
-		1 - groundEffectCoef * pow(((2 * ROTOR_RADIUS) / (4 * (zPos - groundEffectOffset))), 2);
-	zPWM *= max(0., groundEffectMultiplier);
+	// double groundEffectMultiplier =
+	// 	1 - groundEffectCoef * pow(((2 * ROTOR_RADIUS) / (4 * (zPos - groundEffectOffset))), 2);
+	// zPWM *= max(0., groundEffectMultiplier);
 	zPWM = armed && millis() - timeArmed > 100 ? zPWM : 172;
 	data.ch[0] = -yPWM;
 	data.ch[1] = xPWM;
@@ -276,7 +276,7 @@ void loop()
 	if (micros() - lastSbusSend > 1e6 / sbusFrequency)
 	{
 		lastSbusSend = micros();
-		Serial.printf("PWM x: %d, y: %d, z: %d, yaw: %d\nPos x: %f, y: %f, z: %f, yaw: %f\n", xPWM, yPWM, zPWM, yawPWM, xVel, yVel, zPos, yawPos);
+		// Serial.printf("PWM x: %d, y: %d, z: %d, yaw: %d\nPos x: %f, y: %f, z: %f, yaw: %f\n", xPWM, yPWM, zPWM, yawPWM, xVel, yVel, zPos, yawPos);
 		// Serial.printf("Setpoint x: %f, y: %f, z: %f\n", xVelSetpoint, yVelSetpoint, zVelSetpoint);
 		// Serial.printf("Pos x: %f, y: %f, z: %f\n", xVel, yVel, zPos);
 		// Serial.printf("Output x: %f, y: %f, z: %f\n", xVelOutput, yVelOutput, zVelOutput);
